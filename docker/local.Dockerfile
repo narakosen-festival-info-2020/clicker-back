@@ -11,7 +11,7 @@ RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
 # Prepare App
-COPY . $APP_HOME
+COPY ./app $APP_HOME
 
 # CMD go run main.go
 CMD /bin/bash

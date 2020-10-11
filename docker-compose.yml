@@ -11,6 +11,7 @@ services:
       dockerfile: docker/local.Dockerfile
     command: /bin/bash
     links:
+      - nginx
       - postgres
     environment:
       LANG: 'C.UTF-8'
@@ -20,7 +21,7 @@ services:
     env_file:
       - secrets.env
     volumes:
-      - .:/go/src/clicker-back
+      - ./app:/go/src/clicker-back
     stdin_open: true
     tty: true
 
@@ -35,6 +36,18 @@ services:
     ports:
       - '8000:8000'
     command: go run main.go
+
+
+  # ----------------------------------------------------------------------------
+  nginx:
+    # ----------------------------------------------------------------------------
+    image: nginx:1.18.0-alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/public:/usr/share/nginx/html
 
 
   # ----------------------------------------------------------------------------

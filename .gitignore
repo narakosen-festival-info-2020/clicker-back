@@ -6,9 +6,9 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
+/app/tmp/*
 !/log/.keep
-!/tmp/.keep
+!/app/tmp/.keep
 
 # secret file
 secrets.env

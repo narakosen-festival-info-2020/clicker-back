@@ -35,7 +35,7 @@ services:
       dockerfile: docker/local.Dockerfile
     ports:
       - '8000:8000'
-    command: go run main.go
+    command: go run main.go app.go
 
 
   # ----------------------------------------------------------------------------

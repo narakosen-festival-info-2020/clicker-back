@@ -11,6 +11,8 @@ func main() {
 	savePid()
 	defer removePid()
 
+	app()
+
 	println("Hello, world")
 }
 

@@ -4,17 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/api"
+
 	"github.com/facebookgo/pidfile"
 )
-
-func main() {
-	savePid()
-	defer removePid()
-
-	app()
-
-	println("Hello, world")
-}
 
 func savePid() {
 	dir, err := os.Getwd()
@@ -45,4 +38,12 @@ func removePid() {
 		fmt.Println(err.Error())
 		return
 	}
+}
+
+func main() {
+	savePid()
+	defer removePid()
+
+	server := api.Generate()
+	server.Up()
 }

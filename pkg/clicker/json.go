@@ -2,7 +2,7 @@ package clicker
 
 // JSONData is JSON of data (count etc)
 type JSONData struct {
-	Count int `json:"count"`
+	Count float64 `json:"count"`
 }
 
 // GetJSON is convert data to JSON

@@ -44,6 +44,6 @@ func main() {
 	savePid()
 	defer removePid()
 
-	server := api.Generate()
-	server.Up()
+	server := api.Generate("/clicker")
+	server.Up("/clicker")
 }

@@ -18,7 +18,7 @@ type App struct {
 }
 
 // Generate is websocket app generate
-func Generate(url string) App {
+func Generate() App {
 	return App{
 		clickerData: clicker.Data{},
 		clients:     make(map[*websocket.Conn]bool),

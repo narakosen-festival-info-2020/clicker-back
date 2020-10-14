@@ -26,30 +26,17 @@ Back-end of Clicker game
 
 ## For Developers
 
-### 環境構築
+### Make
 
-1. `> env.sh` or `> env.bat`
-2. `> mkdir -p app/tmp/pids`
-3. `> up`
-4. `> run`以降に実行したいコマンドを入力
-    - `go`コマンドはそのままで実行可能
+#### 開発用
+**make dev-image**  
+開発用のDockerイメージをBuild  
 
-### Docker関連
+**make dev-run**  
+Buildしたイメージを実行する。  
 
-- `docker/Dockerfile`
-    - 本番環境用(未完成)
-- `docker/local.Dockerfile`
-    - 開発環境用
-- docker-compose
-    - develop
-        - 諸々のコマンド実行用
-        - `run`はここで実行
-    - app
-        - `main.go`が動作してるやつ
-        - 環境自体はdevelopと同じ
-    - nginx
-        - リバースプロキシ
-        - 使わないかもしれない
-    - postgres
-        - DB
-        - 使わないかもしれない
+**make dev-stop**  
+実行されているコンテナを削除。  
+
+**make dev-logs**  
+ログ取得。  

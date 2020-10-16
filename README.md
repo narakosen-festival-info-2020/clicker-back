@@ -40,3 +40,15 @@ Buildしたイメージを実行する。
 
 **make dev-logs**  
 ログ取得。  
+
+**make main-image**  
+本番用のDockerイメージをBuild  
+
+**make main-run**  
+Buildしたイメージを実行する。  
+
+**make main-stop**  
+実行されているコンテナを削除。  
+
+**make main-logs**  
+ログ取得。  

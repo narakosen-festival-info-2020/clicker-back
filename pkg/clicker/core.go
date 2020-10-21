@@ -7,7 +7,7 @@ import (
 
 // Data is clicker count data :)
 type Data struct {
-	count int
+	count float64
 	sync.RWMutex
 }
 
@@ -16,5 +16,5 @@ func (data *Data) AddCount(cnt int) {
 	defer data.Unlock()
 	fmt.Println(data.count)
 
-	data.count += cnt
+	data.count = data.count + (float64)(cnt)
 }

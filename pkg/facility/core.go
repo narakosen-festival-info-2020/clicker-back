@@ -24,7 +24,7 @@ type Data struct {
 func Generate(name string, numGen, amount float64) Data {
 	return Data{
 		name:    name,
-		numHold: 1,
+		numHold: 0,
 		numGen:  numGen,
 		amount:  amount,
 	}

@@ -1,10 +1,11 @@
 package api
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/gorilla/websocket"
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/clicker"
@@ -64,7 +65,6 @@ func (app *App) handleMessages() {
 		for client := range app.clients {
 			time.Sleep(time.Second / time.Duration((10 * len(app.clients))))
 			err := client.WriteJSON(app.clickerData.GetJSON())
-			fmt.Println(app.clickerData.GetJSON())
 			if err != nil {
 				log.Printf("error: %v", err)
 				client.Close()
@@ -76,13 +76,13 @@ func (app *App) handleMessages() {
 
 // Up is Server Start
 func (app *App) Up(url string) {
-	app.clickerData.InitFacility()
-	http.HandleFunc(url, app.handleConnections)
-	go app.handleMessages()
+	server := gin.Default()
+	facilityRoute(server, app)
 
-	log.Println("http server started on :80")
-	err := http.ListenAndServe(":80", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	app.clickerData.InitFacility()
+	server.GET(url, func(ctx *gin.Context) {
+		app.handleConnections(ctx.Writer, ctx.Request)
+	})
+	go app.handleMessages()
+	server.Run(":80")
 }

@@ -1,7 +1,6 @@
 package clicker
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
@@ -26,7 +25,6 @@ func Generate() Data {
 func (data *Data) AddCount(cnt float64) {
 	data.Lock()
 	defer data.Unlock()
-	fmt.Println(data.count)
 
 	data.count += cnt
 }

@@ -1,5 +1,11 @@
 package clicker
 
+import (
+	"fmt"
+
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
+)
+
 // JSONData is JSON of data (count etc)
 type JSONData struct {
 	Count float64 `json:"count"`
@@ -10,4 +16,21 @@ func (data *Data) GetJSON() JSONData {
 	return JSONData{
 		Count: data.GetCount(),
 	}
+}
+
+// GetFacilityJSON is get spefific facility
+func (data *Data) GetFacilityJSON(name string) (facility.JSONData, error) {
+	if val, check := data.facilities[name]; check {
+		return val.GetJSON(), nil
+	}
+	return facility.JSONData{}, fmt.Errorf("Cannot find %s", name)
+}
+
+// GetAllFacilityJSON is get all facility
+func (data *Data) GetAllFacilityJSON() []facility.JSONData {
+	ret := []facility.JSONData{}
+	for _, val := range data.facilities {
+		ret = append(ret, val.GetJSON())
+	}
+	return ret
 }

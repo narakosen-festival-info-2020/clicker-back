@@ -36,7 +36,7 @@ func facilityRoute(engine *gin.Engine, app *App) {
 		err := app.clickerData.PurchaseFacility(name)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{
-				"stats": err.Error(),
+				"status": err.Error(),
 			})
 			return
 		}

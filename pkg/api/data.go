@@ -20,7 +20,7 @@ type App struct {
 // Generate is websocket app generate
 func Generate() App {
 	return App{
-		clickerData: clicker.Data{},
+		clickerData: clicker.Generate(),
 		clients:     make(map[*websocket.Conn]bool),
 		upgrader: websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool {
@@ -41,7 +41,7 @@ func (app *App) handleConnections(w http.ResponseWriter, r *http.Request) {
 	app.clients[ws] = true
 
 	type receivedMessage struct {
-		Count int `json:"count"`
+		Count float64 `json:"count"`
 	}
 
 	for {
@@ -76,6 +76,7 @@ func (app *App) handleMessages() {
 
 // Up is Server Start
 func (app *App) Up(url string) {
+	app.clickerData.InitFacility()
 	http.HandleFunc(url, app.handleConnections)
 	go app.handleMessages()
 

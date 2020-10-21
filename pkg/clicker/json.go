@@ -7,9 +7,7 @@ type JSONData struct {
 
 // GetJSON is convert data to JSON
 func (data *Data) GetJSON() JSONData {
-	data.RLock()
-	defer data.RUnlock()
 	return JSONData{
-		Count: data.count,
+		Count: data.GetCount(),
 	}
 }

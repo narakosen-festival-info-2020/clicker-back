@@ -3,7 +3,7 @@ NAME=clicker-back
 VERSION=1.0
 
 dev-image:
-	docker build -f ./build/Dockerfile --target develop -t $(DEVNAME):$(VERSION) .
+	DOCKER_BUILDKIT=1 docker build -f ./build/Dockerfile --target develop -t $(DEVNAME):$(VERSION) .
 
 dev-run:
 	docker run -itd -p 80:80 --name $(DEVNAME) $(DEVNAME):$(VERSION)

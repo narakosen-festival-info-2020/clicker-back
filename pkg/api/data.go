@@ -83,6 +83,12 @@ func (app *App) Up(url string) {
 	server.GET(url, func(ctx *gin.Context) {
 		app.handleConnections(ctx.Writer, ctx.Request)
 	})
+
+	server.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": "OK",
+		})
+	})
 	go app.handleMessages()
 	server.Run(":80")
 }

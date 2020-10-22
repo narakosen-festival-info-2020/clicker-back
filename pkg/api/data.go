@@ -34,7 +34,8 @@ func Generate() App {
 func (app *App) handleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := app.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	defer ws.Close()

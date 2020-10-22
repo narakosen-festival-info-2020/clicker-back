@@ -14,7 +14,12 @@ func (data *Data) addFacility(name string, numHold, amount float64) {
 
 // InitFacility is init facilities and exec count up
 func (data *Data) InitFacility() {
-	data.addFacility("temp", 1, 100)
+	data.addFacility("student", 1, 100)
+	data.addFacility("3d-printer", 1.6, 240)
+	data.addFacility("senbei-refining", 4, 400)
+	data.addFacility("lightning-rod", 17, 3000)
+	data.addFacility("router", 40, 10000)
+	data.addFacility("compiler", 120, 35000)
 }
 
 // PurchaseFacility is specify facility purchase

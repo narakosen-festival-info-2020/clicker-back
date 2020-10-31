@@ -53,3 +53,10 @@ func (data *Data) Purchase(click Click) bool {
 	data.amount *= 1.1
 	return true
 }
+
+// GetProductionEfficiency is return Sembei per Second
+func (data *Data) GetProductionEfficiency() float64 {
+	data.RLock()
+	defer data.RUnlock()
+	return data.numHold * data.numGen
+}

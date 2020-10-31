@@ -3,6 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,8 +15,10 @@ import (
 // App is websocket app data
 type App struct {
 	clickerData *clicker.Data
+	totalUsers  int // sync target
 	clients     map[*websocket.Conn]bool
 	upgrader    websocket.Upgrader
+	sync.RWMutex
 }
 
 // Generate is websocket app generate
@@ -39,6 +42,9 @@ func (app *App) handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer ws.Close()
+	app.Lock()
+	app.totalUsers++
+	app.Unlock()
 
 	app.clients[ws] = true
 
@@ -56,7 +62,7 @@ func (app *App) handleConnections(w http.ResponseWriter, r *http.Request) {
 			delete(app.clients, ws)
 			break
 		}
-		go app.clickerData.AddCount(msg.Count)
+		go app.clickerData.AddClick(msg.Count)
 	}
 }
 
@@ -82,6 +88,19 @@ func (app *App) Up(url string) {
 	statementsRoute(server, app)
 
 	app.clickerData.InitFacility()
+
+	generalStatements := make(map[string]func() float64)
+	clickStatements := make(map[string]func() float64)
+	generalStatements["total_users"] = func() float64 {
+		app.RLock()
+		defer app.RUnlock()
+		return (float64)(app.totalUsers)
+	}
+	generalStatements["now_users"] = func() float64 {
+		return (float64)(len(app.clients))
+	}
+	app.clickerData.InitStatements(generalStatements, clickStatements)
+
 	server.GET(url, func(ctx *gin.Context) {
 		app.handleConnections(ctx.Writer, ctx.Request)
 	})

@@ -13,7 +13,7 @@ import (
 
 // App is websocket app data
 type App struct {
-	clickerData clicker.Data
+	clickerData *clicker.Data
 	clients     map[*websocket.Conn]bool
 	upgrader    websocket.Upgrader
 }
@@ -79,6 +79,7 @@ func (app *App) handleMessages() {
 func (app *App) Up(url string) {
 	server := gin.Default()
 	facilityRoute(server, app)
+	statementsRoute(server, app)
 
 	app.clickerData.InitFacility()
 	server.GET(url, func(ctx *gin.Context) {

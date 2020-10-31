@@ -3,6 +3,8 @@ package clicker
 import (
 	"fmt"
 
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/status"
+
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
 )
 
@@ -33,4 +35,16 @@ func (data *Data) GetAllFacilityJSON() []facility.JSONData {
 		ret = append(ret, val.GetJSON())
 	}
 	return ret
+}
+
+// JSONStatements is convert statements to JSON
+type JSONStatements struct {
+	Statements status.JSONData `json:"statements"`
+}
+
+// GetStatements is get all statements
+func (data *Data) GetStatements() JSONStatements {
+	return JSONStatements{
+		Statements: data.statements.GetJSON(),
+	}
 }

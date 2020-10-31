@@ -45,3 +45,11 @@ func facilityRoute(engine *gin.Engine, app *App) {
 		})
 	})
 }
+
+func statementsRoute(engine *gin.Engine, app *App) {
+	group := engine.Group("/statements")
+
+	group.GET("", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, app.clickerData.GetStatements())
+	})
+}

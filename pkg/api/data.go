@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/gorilla/websocket"
@@ -84,6 +85,15 @@ func (app *App) handleMessages() {
 // Up is Server Start
 func (app *App) Up(url string) {
 	server := gin.Default()
+
+	// CORS setup
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{
+		"https://clicker.nitncfes.net",
+		// "http://localhost:3000",
+	}
+	server.Use(cors.New(corsConfig))
+
 	facilityRoute(server, app)
 	statementsRoute(server, app)
 

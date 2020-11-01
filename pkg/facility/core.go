@@ -13,6 +13,7 @@ type Click interface {
 
 // Data is facility Data
 type Data struct {
+	id      int
 	name    string
 	numHold int
 	numGen  float64
@@ -21,8 +22,9 @@ type Data struct {
 }
 
 // Generate facility
-func Generate(name string, numGen, amount float64) Data {
+func Generate(id int, name string, numGen, amount float64) Data {
 	return Data{
+		id:      id,
 		name:    name,
 		numHold: 0,
 		numGen:  numGen,

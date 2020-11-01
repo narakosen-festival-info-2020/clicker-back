@@ -2,6 +2,7 @@ package clicker
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
 
@@ -36,6 +37,9 @@ func (data *Data) GetAllFacilityJSON() []facility.JSONData {
 	for _, val := range data.facilities {
 		ret = append(ret, val.GetJSON())
 	}
+	sort.SliceStable(ret, func(i, j int) bool {
+		return ret[i].ID() < ret[j].ID()
+	})
 	return ret
 }
 

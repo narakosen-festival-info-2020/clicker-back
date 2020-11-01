@@ -3,6 +3,7 @@ package clicker
 import (
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
@@ -16,6 +17,7 @@ type Data struct {
 	clickCount    float64
 	clickGenCount float64
 	perClick      float64
+	achieveCount  int
 	facilities    map[string]*facility.Data // not under sync (sync only facility.Data)
 	statements    status.Data               // not under sync (sync only status.Data)
 	achievements  achieve.Data              // not under sync (sync only achieve.Data)
@@ -30,10 +32,18 @@ func Generate() *Data {
 		clickCount:    0,
 		clickGenCount: 0,
 		perClick:      1,
+		achieveCount:  0,
 		facilities:    make(map[string]*facility.Data),
 		statements:    status.Data{},
 		achievements:  achieve.Data{},
 	}
+	update := func() {
+		for {
+			ret.perClick = 1 + ret.GetSembeiPerSecond()/100*(float64)(ret.achieveCount)
+			time.Sleep(time.Second / 100)
+		}
+	}
+	go update()
 	return &ret
 }
 
@@ -97,10 +107,9 @@ func (data *Data) UpgradeByAchieve() {
 
 // UpgradeByInherentAchieve is apply inherent achieve
 func (data *Data) UpgradeByInherentAchieve() {
-	tmp := data.GetSembeiPerSecond()
 	data.Lock()
 	defer data.Unlock()
-	data.perClick += tmp / 100
+	data.achieveCount++
 }
 
 // InitStatements is init statements(all status) and automatic update

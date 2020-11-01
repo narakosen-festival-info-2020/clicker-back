@@ -92,7 +92,7 @@ func (app *App) Up(url string) {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{
 		"https://clicker.nitncfes.net",
-		// "http://localhost:3000",
+		"http://localhost:3000",
 	}
 	server.Use(cors.New(corsConfig))
 

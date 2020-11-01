@@ -3,15 +3,15 @@ package api
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
-	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
 	"github.com/gorilla/websocket"
+
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/clicker"
 )
 
@@ -92,7 +92,7 @@ func (app *App) Up(url string) {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{
 		"https://clicker.nitncfes.net",
-		"http://localhost:3000",
+		// "http://localhost:3000",
 	}
 	server.Use(cors.New(corsConfig))
 
@@ -114,10 +114,27 @@ func (app *App) Up(url string) {
 	}
 	app.clickerData.InitStatements(generalStatements, clickStatements)
 
-	achieveCheck := make(map[string]func() bool)
-	affiliation := make(map[string][]achieve.Upgrade)
+	otherName := make([]string, 0)
+	otherCheck := make(map[string]func() bool)
+	otherInherent := make(map[string][]achieve.Upgrade)
 
-	app.clickerData.InitAchivements(achieveCheck, affiliation)
+	uniqueSuccess := []int{
+		1, 5, 10, 50, 100, 200, 350, 500, 750, 1000, 1250, 1500, 2000, 3500, 5000, 7500, 10000, 20000, 50000, 100000,
+	}
+
+	for _, value := range uniqueSuccess {
+		tmp := value
+		name := "unique-user-" + strconv.Itoa(tmp)
+		otherName = append(otherName, name)
+		otherCheck[name] = func() bool {
+			return app.totalUsers >= tmp
+		}
+		otherInherent[name] = []achieve.Upgrade{
+			app.clickerData,
+		}
+	}
+
+	app.clickerData.InitAchivements(otherCheck, otherName, otherInherent)
 
 	server.GET(url, func(ctx *gin.Context) {
 		app.handleConnections(ctx.Writer, ctx.Request)

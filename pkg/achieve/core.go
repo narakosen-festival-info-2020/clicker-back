@@ -13,21 +13,23 @@ type Upgrade interface {
 
 // Core is achievement based data
 type Core struct {
-	id          int
-	name        string
-	unlocked    bool
-	check       func() bool
-	affiliation []Upgrade
+	id       int
+	name     string
+	unlocked bool
+	check    func() bool
+	general  []Upgrade
+	inherent []Upgrade
 	sync.RWMutex
 }
 
-func generateCore(id int, name string, check func() bool, affiliation []Upgrade) Core {
+func generateCore(id int, name string, check func() bool, general, inherent []Upgrade) Core {
 	return Core{
-		id:          id,
-		name:        name,
-		unlocked:    false,
-		affiliation: affiliation,
-		check:       check,
+		id:       id,
+		name:     name,
+		unlocked: false,
+		general:  general,
+		inherent: inherent,
+		check:    check,
 	}
 }
 
@@ -40,9 +42,11 @@ func (data *Core) Check() {
 	defer data.Unlock()
 	data.unlocked = data.check()
 	if data.unlocked {
-		for _, tmp := range data.affiliation {
-			tmp.UpgradeByAchieve()
+		for _, tmp := range data.inherent {
 			tmp.UpgradeByInherentAchieve()
+		}
+		for _, tmp := range data.general {
+			tmp.UpgradeByAchieve()
 		}
 	}
 }
@@ -54,8 +58,8 @@ type Data struct {
 }
 
 // Add is data into core
-func (data *Data) Add(name string, check func() bool, affiliation []Upgrade) {
-	tmp := generateCore(data.nowID, name, check, affiliation)
+func (data *Data) Add(name string, check func() bool, general, inherent []Upgrade) {
+	tmp := generateCore(data.nowID, name, check, general, inherent)
 	data.nowID++
 	data.achievements = append(data.achievements, &tmp)
 }

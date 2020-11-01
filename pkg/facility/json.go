@@ -3,7 +3,7 @@ package facility
 // JSONData is JSON of Data
 type JSONData struct {
 	Name    string  `json:"name"`
-	NumHold float64 `json:"num_hold"`
+	NumHold int     `json:"num_hold"`
 	NumGen  float64 `json:"num_gen"`
 	Amount  float64 `json:"amount"`
 }

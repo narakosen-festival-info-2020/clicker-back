@@ -1,10 +1,10 @@
 package clicker
 
 import (
+	"strconv"
 	"sync"
 
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
-
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/status"
 )
@@ -149,12 +149,58 @@ func (data *Data) InitStatements(otherGeneral, otherClick map[string]func() floa
 }
 
 // InitAchivements is init achivements(all achieve) and automatic check
-func (data *Data) InitAchivements(other map[string]func() bool, otherAffiliation map[string][]achieve.Upgrade) {
+func (data *Data) InitAchivements(other map[string]func() bool, otherName []string, otherInherent map[string][]achieve.Upgrade) {
 	defer data.achievements.InitCheck()
 
-	data.achievements.Add("one_click", func() bool {
-		return data.count >= 1
-	}, []achieve.Upgrade{
-		data,
-	})
+	general := make([]achieve.Upgrade, 0)
+	for _, tmp := range data.facilities {
+		general = append(general, tmp)
+	}
+
+	// about clicker
+	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+		tmp := value
+		data.achievements.Add("total-senbei-"+strconv.Itoa(idx), func() bool {
+			return data.totalCount >= tmp
+		}, general, []achieve.Upgrade{})
+		value *= 1000
+	}
+
+	// about sps
+	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+		tmp := value
+		data.achievements.Add("sps-"+strconv.Itoa(idx), func() bool {
+			return data.GetSembeiPerSecond() >= tmp
+		}, general, []achieve.Upgrade{})
+		value *= 1000
+	}
+
+	// about gen click
+	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+		tmp := value
+		data.achievements.Add("click-senbei-"+strconv.Itoa(idx), func() bool {
+			return data.clickGenCount >= tmp
+		}, general, []achieve.Upgrade{})
+		value *= 1000
+	}
+
+	numSuccess := []int{
+		1, 5, 10, 50, 100, 150, 200, 250, 300, 400, 600, 750, 1200, 1500,
+	}
+
+	for name, tmp := range data.facilities {
+		for _, value := range numSuccess {
+			tmpV := value
+			tmpF := tmp
+			data.achievements.Add(name+"-"+strconv.Itoa(value), func() bool {
+				return tmpF.GetNumHold() >= tmpV
+			}, general, []achieve.Upgrade{
+				tmpF,
+			})
+		}
+	}
+
+	for _, tmp := range otherName {
+		data.achievements.Add(tmp, other[tmp], general, otherInherent[tmp])
+	}
 }

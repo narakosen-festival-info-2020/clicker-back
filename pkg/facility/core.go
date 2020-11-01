@@ -14,7 +14,7 @@ type Click interface {
 // Data is facility Data
 type Data struct {
 	name    string
-	numHold float64
+	numHold int
 	numGen  float64
 	amount  float64
 	sync.RWMutex
@@ -36,7 +36,7 @@ func (data *Data) CountUp(click Click) {
 		for {
 			time.Sleep(time.Millisecond * 100)
 			data.RLock()
-			click.AddCount(data.numHold * data.numGen / 10)
+			click.AddCount((float64)(data.numHold) * data.numGen / 10)
 			data.RUnlock()
 		}
 	}()
@@ -58,5 +58,22 @@ func (data *Data) Purchase(click Click) bool {
 func (data *Data) GetProductionEfficiency() float64 {
 	data.RLock()
 	defer data.RUnlock()
-	return data.numHold * data.numGen
+	return (float64)(data.numHold) * data.numGen
+}
+
+// GetNumHold is return numHold
+func (data *Data) GetNumHold() int {
+	return data.numHold
+}
+
+// UpgradeByAchieve is applly all achieve
+func (data *Data) UpgradeByAchieve() {
+	// nothing
+}
+
+// UpgradeByInherentAchieve is apply inherent achieve
+func (data *Data) UpgradeByInherentAchieve() {
+	data.Lock()
+	defer data.Unlock()
+	data.numGen *= 1.5
 }

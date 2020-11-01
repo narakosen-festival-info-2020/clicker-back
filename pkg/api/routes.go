@@ -53,3 +53,11 @@ func statementsRoute(engine *gin.Engine, app *App) {
 		ctx.JSON(http.StatusOK, app.clickerData.GetStatements())
 	})
 }
+
+func achievementsRoute(engine *gin.Engine, app *App) {
+	group := engine.Group("/achievements")
+
+	group.GET("", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, app.clickerData.GetAchievemnets())
+	})
+}

@@ -6,6 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
@@ -90,12 +92,13 @@ func (app *App) Up(url string) {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{
 		"https://clicker.nitncfes.net",
-		// "http://localhost:3000",
+		"http://localhost:3000",
 	}
 	server.Use(cors.New(corsConfig))
 
 	facilityRoute(server, app)
 	statementsRoute(server, app)
+	achievementsRoute(server, app)
 
 	app.clickerData.InitFacility()
 
@@ -110,6 +113,11 @@ func (app *App) Up(url string) {
 		return (float64)(len(app.clients))
 	}
 	app.clickerData.InitStatements(generalStatements, clickStatements)
+
+	achieveCheck := make(map[string]func() bool)
+	affiliation := make(map[string][]achieve.Upgrade)
+
+	app.clickerData.InitAchivements(achieveCheck, affiliation)
 
 	server.GET(url, func(ctx *gin.Context) {
 		app.handleConnections(ctx.Writer, ctx.Request)

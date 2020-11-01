@@ -3,6 +3,8 @@ package clicker
 import (
 	"fmt"
 
+	"github.com/narakosen-festival-info-2020/clicker-back/pkg/achieve"
+
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/status"
 
 	"github.com/narakosen-festival-info-2020/clicker-back/pkg/facility"
@@ -47,4 +49,9 @@ func (data *Data) GetStatements() JSONStatements {
 	return JSONStatements{
 		Statements: data.statements.GetJSON(),
 	}
+}
+
+// GetAchievemnets is get all achievements
+func (data *Data) GetAchievemnets() achieve.JSONData {
+	return data.achievements.GetJSON()
 }

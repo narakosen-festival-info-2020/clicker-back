@@ -1,7 +1,7 @@
 let ws;
 
 $(() => {
-    ws = new WebSocket('ws://localhost:80/clicker');
+    ws = new WebSocket('ws://localhost/clicker');
     ws.addEventListener('message', function(e) {
         const msg = JSON.parse(e.data);
         $('#count').text(msg.count)

@@ -60,17 +60,13 @@ func (data *Data) AddCount(cnt float64) {
 func (data *Data) AddClick(cnt float64) {
 	data.Lock()
 	defer data.Unlock()
-	tmp := cnt * data.perClick
 	if cnt <= 0 {
 		return
 	}
-	if cnt > 20 {
-		tmp = 20 * data.perClick
-	}
-	data.count += tmp
-	data.totalCount += tmp
-	data.clickCount += cnt
-	data.clickGenCount += tmp
+	data.count += data.perClick
+	data.totalCount += data.perClick
+	data.clickCount++
+	data.clickGenCount += data.perClick
 }
 
 // MinusCount is minus count (etc purchase)
@@ -167,34 +163,34 @@ func (data *Data) InitAchivements(other map[string]func() bool, otherName []stri
 	}
 
 	// about clicker
-	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+	for idx, value := 0, 1.0; idx <= 60; idx++ {
 		tmp := value
 		data.achievements.Add("total-senbei-"+strconv.Itoa(idx), func() bool {
 			return data.totalCount >= tmp
 		}, general, []achieve.Upgrade{})
-		value *= 1000
+		value *= 10
 	}
 
 	// about sps
-	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+	for idx, value := 0, 1.0; idx <= 60; idx++ {
 		tmp := value
 		data.achievements.Add("sps-"+strconv.Itoa(idx), func() bool {
 			return data.GetSembeiPerSecond() >= tmp
 		}, general, []achieve.Upgrade{})
-		value *= 1000
+		value *= 10
 	}
 
 	// about gen click
-	for idx, value := 0, 1.0; idx <= 150; idx += 3 {
+	for idx, value := 0, 1.0; idx <= 60; idx++ {
 		tmp := value
 		data.achievements.Add("click-senbei-"+strconv.Itoa(idx), func() bool {
 			return data.clickGenCount >= tmp
 		}, general, []achieve.Upgrade{})
-		value *= 1000
+		value *= 10
 	}
 
 	numSuccess := []int{
-		1, 5, 10, 50, 100, 150, 200, 250, 300, 400, 600, 750, 1200, 1500,
+		1, 5, 10, 30, 50, 70, 100, 130, 180, 250, 300, 350, 400, 500, 600, 800, 1000,
 	}
 
 	for name, tmp := range data.facilities {
